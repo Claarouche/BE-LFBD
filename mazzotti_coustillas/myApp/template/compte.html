@@ -1,0 +1,105 @@
+<!-- /*
+* Template Name: Tour
+* Template Author: Untree.co
+* Tempalte URI: https://untree.co/
+* License: https://creativecommons.org/licenses/by/3.0/
+*/ -->
+<!doctype html>
+<html lang="en">
+<head>{% set title="Créer un compte"%}
+  {% include ("layout/head.html") %}
+</head>
+
+<body>
+  {% set title="Créer un compte"%}
+  {% set description="Rejoignez-nous !"%}
+  {% include ("layout/header.html") %}
+  
+  <div class="untree_co-section">
+    <div class="container">
+          <form class="contact-form" data-aos="fade-up" data-aos-delay="200">
+            <div class="row">
+              <div class="col-6">
+                <div class="form-group">
+                  <label class="text-black" for="nom"></label>
+                  <input type="text" class="form-control" id="nom" placeholder="Nom" required>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  <label class="text-black" for="prenom"></label>
+                  <input type="text" class="form-control" id="prenom" placeholder="Prénom" required>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="text-black" for="email"></label>
+              <input type="email" class="form-control" id="email" placeholder="Adresse email" required>
+            </div>
+            <div class="form-group">
+              <label for="statut"></label>
+              <select id="statut" name="statut" class="form-control" required>
+                <option disabled selected>Statut</option>
+                <option value="Agent">Agent</option>
+                <option value="Gestionnaire">Gestionnaire</option>
+                <option value="Administrateur">Administrateur</option>
+              </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Créer le compte</button>
+          </form>
+    </div>
+  </div>
+
+  
+
+  <div class="untree_co-section testimonial-section mt-5 bg-white">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-7 text-center">
+          <h2 class="section-title text-center mb-5">Derniers utilisateurs ajoutés</h2>
+
+          <div class="owl-single owl-carousel no-nav">
+            <div class="testimonial mx-auto">
+              <figure class="img-wrap">
+                <img src="../static/images/person_2.jpg" alt="Image" class="img-fluid">
+              </figure>
+              <h3 class="name">Adam Aderson</h3>
+              <blockquote>
+                <p>&ldquo;There live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.&rdquo;</p>
+              </blockquote>
+            </div>
+
+            <div class="testimonial mx-auto">
+              <figure class="img-wrap">
+                <img src="../static/images/person_3.jpg" alt="Image" class="img-fluid">
+              </figure>
+              <h3 class="name">Lukas Devlin</h3>
+              <blockquote>
+                <p>&ldquo;There live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.&rdquo;</p>
+              </blockquote>
+            </div>
+
+            <div class="testimonial mx-auto">
+              <figure class="img-wrap">
+                <img src="../static/images/person_4.jpg" alt="Image" class="img-fluid">
+              </figure>
+              <h3 class="name">Kayla Bryant</h3>
+              <blockquote>
+                <p>&ldquo;There live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.&rdquo;</p>
+              </blockquote>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="site-footer">
+    {% include ("layout/footer.html") %}
+  </div>
+  {% include ("layout/scripts.html") %}
+</body>
+
+</html>
