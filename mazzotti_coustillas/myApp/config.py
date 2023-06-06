@@ -14,7 +14,7 @@ DB_SERVER = {
     "password": "",
     "host": "localhost",
     "port": 3306, 
-    "database": "gsea_cours", #nom de la BDD
+    "database": "gsea22a_mazzotti_coustillas", #nom de la BDD
     "raise_on_warnings": True
 }
 

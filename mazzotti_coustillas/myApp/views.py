@@ -1,4 +1,6 @@
-from flask import Flask, render_template, redirect, session
+from flask import Flask, render_template, redirect, session, request
+from .model import bdd
+from .controller import function as f
 app = Flask(__name__)
 app.template_folder = "template"
 app.static_folder = "static"
@@ -24,6 +26,32 @@ def webmasters():
 def login():
     return render_template("login.html")
 
+@app.route("/logout")
+def logout():
+    session.clear()
+    return render_template("login.html")
+
 @app.route("/nouveaucompte")
 def nouveaucompte():
     return render_template("compte.html")
+
+@app.route("/connecter", methods=["POST"])
+def connecter():
+    login = request.form['login']
+    password = request.form['password']
+    user = bdd.verifAuthData(login, password)
+    try:
+    # Authentification réussie
+        session["idUser"] = user["idUser"]
+        session["nom"] = user["nom"]
+        session["prenom"] = user["prenom"]
+        session["mail"] = user["mail"]
+        session["statut"] = user["statut"]
+        session["infoVert"] = "Authentification réussie"
+        params=f.messageInfo({})
+        return render_template("index.html", **params) # vers page accueil
+    except TypeError as err:
+        # Authentification refusée
+        session["infoRouge"] = "Authentification refusée"
+        params=f.messageInfo({})
+        return render_template("login.html", **params) # vers page login

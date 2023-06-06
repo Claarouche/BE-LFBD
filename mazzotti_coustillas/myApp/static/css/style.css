@@ -28,6 +28,9 @@ body {
 .text-black {
   color: #000000 !important; }
 
+.text-white {
+  color: #ffffff !important; }
+  
 a {
   color: #1A374D;
   -webkit-transition: .3s all ease;

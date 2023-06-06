@@ -14,11 +14,20 @@
 
             <ul class="js-clone-nav d-none d-lg-inline-block text-left site-menu float-right">
                 <li class="active"><a href="/">Accueil</a></li>
-                <li><a href="/surveillance">Surveillance</a></li>
-                <li><a href="/administration">Administration</a></li>
                 <li><a href="/webmasters">Webmasters</a></li>
-                <li><a href="/login">Se connecter</a></li>
+                {% if session.idUser%}
+                <li><a href="/surveillance">Surveillance</a></li>
+                <li><a href="/logout">Se déconnecter</a></li>
+                {% if session.statut==0%}               
                 <li><a href="/nouveaucompte">Création de compte</a></li>
+                <li><a href="/administration">Administration</a></li>
+                {%endif%}
+                {%else%}
+                <li><a href="/login">Se connecter</a></li>
+                {%endif%}
+                {% if session.idUser %}
+                <li class="text-white"><h5><b>|| {{session.prenom}} {{session.nom}} </b></h5></li>
+                {% endif %}
             </ul>
 
             <a href="#" class="burger ml-auto float-right site-menu-toggle js-menu-toggle d-inline-block d-lg-none light" data-toggle="collapse" data-target="#main-navbar">
@@ -28,16 +37,3 @@
         </div>
     </div>
 </nav>
-
-<div class="hero hero-inner">
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-6 mx-auto text-center">
-          <div class="intro-wrap">
-            <h1 class="mb-0">{{title}}</h1>
-            <p class="text-white">{{description}}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
