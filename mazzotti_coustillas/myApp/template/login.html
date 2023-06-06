@@ -27,7 +27,29 @@
 
   {% include ("layout/header.html") %}
   {% include("layout/info.html") %}
+  
+  {% if changementmdp %}
+  <div class="untree_co-section">
+    <div class="container">
+          <form action="/nouveaumdp" class="contact-form" data-aos="fade-up" data-aos-delay="200" method="post">
+            <div class="form-group">
+              <label class="text-black text-center" for="oldmdp"></label>
+              <input type="password" class="form-control" id="oldmdp" name="oldmdp" placeholder="Votre ancien mot de passe" required>
+            </div>
+            <div class="form-group">
+              <label class="text-black text-center" for="newmdp"></label>
+              <input type="password" class="form-control" id="newmdp" name="newmdp" placeholder="Votre nouveau mot de passe" required>
+            </div>
+            <div class="form-group">
+              <label class="text-black text-center" for="newmdpconfirmed"></label>
+              <input type="password" class="form-control" id="newmdpconfirmed" name="newmdpconfirmed" placeholder="Confirmez votre nouveau mot de passe" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Valider</button>
+          </form>
+    </div>
+  </div>
 
+  {%else%}
   <div class="untree_co-section">
     <div class="container">
           <form action="/connecter" class="contact-form" data-aos="fade-up" data-aos-delay="200" method="post">
@@ -43,7 +65,7 @@
           </form>
     </div>
   </div>
-
+{% endif %}
   
 
   <div class="untree_co-section testimonial-section mt-5 bg-white">

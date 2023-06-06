@@ -1,5 +1,7 @@
 from flask import session
+import random
 
+#Messages 
 def messageInfo(params = {}):
     if "infoVert" in session:
         params["infoVert"] = session['infoVert']
@@ -17,3 +19,9 @@ def messageInfo(params = {}):
         params["successDB"] = session['successDB']
         session.pop("successDB", None)
     return params
+
+#Génération des mots de passe
+def generation():
+    s="abcdefghijklmnopqrstuvwxyz01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()?"
+    mdp="".join(random.sample(s,6)) #6=longueur du mot de passe
+    return mdp

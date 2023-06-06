@@ -15,7 +15,7 @@
             <ul class="js-clone-nav d-none d-lg-inline-block text-left site-menu float-right">
                 <li class="active"><a href="/">Accueil</a></li>
                 <li><a href="/webmasters">Webmasters</a></li>
-                {% if session.idUser%}
+                {% if session.idUser and session.newMdp!=2 %}
                 <li><a href="/surveillance">Surveillance</a></li>
                 <li><a href="/logout">Se déconnecter</a></li>
                 {% if session.statut==0%}               
@@ -25,7 +25,7 @@
                 {%else%}
                 <li><a href="/login">Se connecter</a></li>
                 {%endif%}
-                {% if session.idUser %}
+                {% if session.idUser and session.newMdp!=2 %}
                 <li class="text-white"><h5><b>|| {{session.prenom}} {{session.nom}} </b></h5></li>
                 {% endif %}
             </ul>
