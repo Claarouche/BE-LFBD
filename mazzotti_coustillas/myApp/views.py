@@ -18,7 +18,11 @@ def surveillance():
 
 @app.route("/administration")
 def administration():
-    return render_template("administration.html")
+    listeMembres = bdd.get_membresData()
+    print(listeMembres)
+    params = { 'liste': listeMembres }
+    params = f.messageInfo(params)
+    return render_template("administration.html", **params)
 
 @app.route("/webmasters")
 def webmasters():
@@ -108,3 +112,4 @@ def changermdp():
         params=f.messageInfo({})
         params["changementmdp"]="Changement de mot de passe nécessaire"
         return render_template("login.html", **params)
+    

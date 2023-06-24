@@ -25,7 +25,9 @@ def add_userData(email, nom, prenom, login, statut, mdpC):
     cnx = bddGen.connexion()
     if cnx is None: return None
     sql = "INSERT INTO identification (nom, prenom, mail, login, motPasse, statut) VALUES (%s, %s, %s, %s, %s, %s);"
-    if statut=="Agent" or statut=="Gestionnaire":
+    if statut=="Agent":
+       no_statut=2
+    elif statut=="Gestionnaire":
        no_statut=1
     else:
        no_statut=0
@@ -50,3 +52,17 @@ def update_userData(champ, newValue, idUser):
  }
     bddGen.updateData(cnx, sql, param, msg)
     cnx.close()
+
+#Récupération des données de la table identification
+def get_membresData():
+   cnx = bddGen.connexion()
+   if cnx is None: return None
+   sql = "SELECT * FROM identification"
+   param = None
+   msg = {
+ "success":"OKmembres",
+ "error" : "Failed get membres data"
+ }
+   listeMembre = bddGen.selectData(cnx, sql, param, msg)
+   cnx.close()
+   return listeMembre

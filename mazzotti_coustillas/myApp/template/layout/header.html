@@ -18,7 +18,10 @@
                 {% if session.idUser and session.newMdp!=2 %}
                 <li><a href="/surveillance">Surveillance</a></li>
                 <li><a href="/logout">Se déconnecter</a></li>
-                {% if session.statut==0%}               
+                {% if session.statut==1 %}               
+                <li><a href="/nouveaucompte">Création de compte</a></li>
+                {%endif%}
+                {% if session.statut==0%}
                 <li><a href="/nouveaucompte">Création de compte</a></li>
                 <li><a href="/administration">Administration</a></li>
                 {%endif%}
