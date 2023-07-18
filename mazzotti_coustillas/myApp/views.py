@@ -14,13 +14,24 @@ def index():
 
 @app.route("/surveillance")
 def surveillance():
-    return render_template("surveillance.html")
+    historique=bdd.get_historiqueData()
+    infrastructures=bdd.get_checkpointsData()
+    params = { 'listehisto': historique, 'infra' : infrastructures }
+    return render_template("surveillance.html",**params)
 
-@app.route("/administration")
-def administration():
+@app.route("/administration/gestioncomptes")
+def gestioncomptes():
     listeMembres = bdd.get_membresData()
-    print(listeMembres)
     params = { 'liste': listeMembres }
+    params["page"]="utilisateur"
+    params = f.messageInfo(params)
+    return render_template("administration.html", **params)
+
+@app.route("/administration/gestioninfrastructures")
+def gestioninfrastructures():
+    listeInfrastructures = bdd.get_checkpointsData()
+    params = { 'liste': listeInfrastructures }
+    params["page"]="infrastructures"
     params = f.messageInfo(params)
     return render_template("administration.html", **params)
 
@@ -58,7 +69,7 @@ def connecter():
         session["infoVert"] = "Authentification réussie"
         params=f.messageInfo({})
         if session['newMdp']==0:
-            return render_template("surveillance.html", **params) # vers surveillance
+            return render_template("index.html", **params) # vers surveillance
         else :
             session["infoBleu"]="Vous devez changer votre mot de passe avant de vous connecter."
             params=f.messageInfo({})
@@ -113,3 +124,81 @@ def changermdp():
         params["changementmdp"]="Changement de mot de passe nécessaire"
         return render_template("login.html", **params)
     
+@app.route("/updateStatut", methods=['POST'])
+def updateStatut(champ=None):
+    idUser = request.form['pk']
+    newvalue = request.form['value']
+    bdd.update_statutData(idUser, newvalue)
+    return "ok"
+
+@app.route("/find/<id>")
+def infrastructure(id):
+    infrastructures=bdd.get_checkpointsData()
+    dataInfrastructure=bdd.get_onecheckpointData(id)
+    historiqueInfrastructure=bdd.get_onecheckpointHistorique(id)
+    historique=bdd.get_historiqueData()
+    params = { 'data': dataInfrastructure, 'histo' : historiqueInfrastructure, 'listehisto': historique, 'infra' : infrastructures }
+    return render_template("surveillance.html", **params)
+
+@app.route("/addhistorique", methods=['POST'])
+def addhistorique():
+    idCheckpoint=request.form['infra']
+    etat=request.form['etat']
+    niveau=request.form['niveau']
+    nature=request.form['nature']
+    remarques=request.form['remarques']
+    bdd.add_historique(etat, niveau, nature, remarques, session['idUser'], idCheckpoint)
+    historique=bdd.get_historiqueData()
+    infrastructures=bdd.get_checkpointsData()
+    params=f.messageInfo({})
+    params['listehisto']= historique
+    params['infra'] = infrastructures 
+    if "errorDB" not in session:
+        session["infoVert"] = "Nouvelle vérification insérée"
+    else:
+        session["infoRouge"] = "Problème ajout vérification"
+    return render_template('surveillance.html',**params)
+
+@app.route('/addinfrastructure', methods=['POST'])
+def addinfrastructure():
+    code=request.form['code']
+    nom=request.form['nom']
+    type=request.form['type'] 
+    zone=request.form['zone']  
+    bdd.add_infrastructure(code, nom, type, zone)
+    listeInfrastructures = bdd.get_checkpointsData()
+    params=f.messageInfo({})
+    params['liste']= listeInfrastructures
+    params["page"]="infrastructures"
+    if "errorDB" not in session:
+        session["infoVert"] = "Nouvelle infrastructure insérée"
+    else:
+        session["infoRouge"] = "Problème ajout infrastructure"
+    return render_template("administration.html", **params)
+
+@app.route('/suppInfra/<id>')
+def suppinfrastructure(id):
+    bdd.del_membreData(id)
+    listeInfrastructures = bdd.get_checkpointsData()
+    params=f.messageInfo({})
+    params['liste']= listeInfrastructures
+    params["page"]="infrastructures"
+    if "errorDB" not in session:
+        session["infoVert"] = "Infrastructure supprimée"
+    else:
+        session["infoRouge"] = "Problème suppression infrastructure"
+    return render_template("administration.html", **params)
+
+@app.route('/updateInfra/<champ>', methods=['POST'])
+def updateinfrastructure(champ):
+    idCheckpoint = request.form['pk']
+    newvalue = request.form['value']
+    if champ == "code":
+        bdd.update_InfraData("codeCheckpoint", idCheckpoint, newvalue)
+    elif champ == "nom":
+        bdd.update_InfraData("nomCheckpoint", idCheckpoint, newvalue)
+    elif champ == "type":
+        bdd.update_InfraData("type", idCheckpoint, newvalue)
+    else:
+        bdd.update_InfraData("idZone", idCheckpoint, newvalue)
+    return "ok"

@@ -23,7 +23,13 @@
                 {%endif%}
                 {% if session.statut==0%}
                 <li><a href="/nouveaucompte">Création de compte</a></li>
-                <li><a href="/administration">Administration</a></li>
+                <li class="has-children">
+                    <a href="/">Administration</a>
+                    <ul class="dropdown">
+                        <li><a href="/administration/gestioncomptes">Utilisateurs</a></li>
+                        <li><a href="/administration/gestioninfrastructures">Infrastructures</a></li>
+                    </ul>
+                </li>
                 {%endif%}
                 {%else%}
                 <li><a href="/login">Se connecter</a></li>

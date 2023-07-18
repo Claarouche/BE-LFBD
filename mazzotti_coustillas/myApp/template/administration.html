@@ -6,9 +6,14 @@
 */ -->
 <!doctype html>
 <html lang="en">
+
 <head>
   {% set title="Administration"%}
   {% include ("layout/head.html") %}
+  <link rel="stylesheet"
+    href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" />
+
+
 </head>
 
 <body>
@@ -18,48 +23,50 @@
         <div class="col-lg-6 mx-auto text-center">
           <div class="intro-wrap">
             <h1 class="mb-0">Administration</h1>
-            <p class="text-white">Vous êtes ans le mode administrateur !</p>
+            <p class="text-white">{% if page=="utilisateur" %} Gestion du statut des utilisateurs
+              {% else %}
+              Gestion des infrastructures : ajout, modification, suppression
+              {% endif %}
+            </p>
           </div>
         </div>
       </div>
     </div>
   </div>
-  
+
   {% include ("layout/header.html") %}
   {% include("layout/info.html") %}
-  
-  
+
+  {% if page=="utilisateur" %}
   <div class="untree_co-section">
     <div class="container">
       <div class="row">
-        <div class="col-lg-7">
-          <table class="table">
-            <thead>
-              <tr>
-              <th><i class="fas fa-user fa-2x"></i> <br /><b>Nom d'utilisateur</b></th>
-              <th><i class="fas fa-dice fa-2x"></i><br /><b>Nom</b></th>
-              <th><i class="fas fa-trophy fa-2x"></i><br /><b>Prénom</b></th>
-              <th> <i class="fas fa-percent fa-2x"></i><br /><b>Statut</b></th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for user in liste %}
-               <tr>
+        <table class="table tablecenter">
+          <thead>
+            <tr>
+              <th><i class="fas fa-user fa-1x"></i><b> Nom d'utilisateur</b></th>
+              <th><b>Nom</b></th>
+              <th><b>Prénom</b></th>
+              <th><b>Statut</b></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in liste %}
+            <tr>
               <td>{{user.login}}</td>
               <td>{{user.nom}}</td>
               <td>{{user.prenom}}</td>
-              <td>{% if user.statut==0%}
+              <td class='modifSelect' data-url='/updateStatut' data-pk='{{user.login}}'>{% if user.statut==0%}
                 Administrateur
                 {% elif user.statut==1%}
                 Gestionnaire
                 {% else %}
-                Agent</td>
-                {% endif %}
-              </tr>
-              {% endfor %}              
-            </tbody>
-            </table>
-        </div>
+                Agent
+                {% endif %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -69,6 +76,132 @@
     {% include ("layout/footer.html") %}
   </div>
   {% include ("layout/scripts.html") %}
+  <script
+    src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+  <script>
+    const $ = jQuery.noConflict()
+    $(function () {
+      $.fn.editable.defaults.mode = 'inline'
+      $(".modif").editable()
+      $(".modifSelect").editable({
+        type: 'select',
+        source: [
+          { value: 2, text: 'Agent' },
+          { value: 1, text: 'Gestionnaire' },
+          { value: 0, text: 'Administrateur' }
+        ]
+      })
+    })
+  </script>
+
+  {% else %}
+
+  <div class="untree_co-section">
+    <div class="container">
+      <div class="row">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+          Ajouter une infrastructure
+        </button>
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ajouter une infrastructure</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form action="/addinfrastructure" method="post" role="form">
+                  <div class="form-group" >
+                    <label class="text-black" for="code">Code</label>
+                    <input type="text" name="code" class="form-control" id="code">
+                  </div>
+                  <div class="form-group" >
+                    <label class="text-black" for="nom">Nom</label>
+                    <input type="text" name="nom" class="form-control" id="nom">
+                  </div>
+                  <div class="form-group" >
+                    <label class="text-black" for="nom">Type</label>
+                    <input type="text" name="type" class="form-control" id="nom">
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black" for="zone">Zone</label>
+                    <select name="zone" id="zone" class="custom-select">
+                      <option value="1">N°1</option>
+                      <option value="2">N°2</option>
+                      <option value="3">N°3</option>
+                      <option value="4">N°4</option>
+                      <option value="5">N°5</option>
+                    </select>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="submit" class="btn btn-success">Envoyer</button>
+              </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <table class="table tablecenter ">
+          <thead>
+            <tr>
+             <th></th>
+              <th><b>Code</b></th>
+              <th><b>Nom</b></th>
+              <th><b>Type</b></th>
+              <th><b>Zone</b></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for infrastructure in liste %}
+            <tr>
+              <td><a href="/suppInfra/{{infrastructure.idCheckpoint}}"><i class="fas fa-trash text-danger fa-1x"></i></a></td>
+              <td class='modif'
+              data-url = '/updateInfra/code'
+              data-pk='{{infrastructure.idCheckpoint}}'>{{infrastructure.codeCheckpoint}}</td>
+              <td class='modif'
+              data-url = '/updateInfra/nom'
+              data-pk='{{infrastructure.idCheckpoint}}'>{{infrastructure.nomCheckpoint}}</td>
+              <td class='modif'
+              data-url = '/updateInfra/type'
+              data-pk='{{infrastructure.idCheckpoint}}'>{{infrastructure.type}}</td>
+              <td class='modifSelect'
+              data-url = '/updateInfra/zone'
+              data-pk='{{infrastructure.idCheckpoint}}'>N°{{infrastructure.idZone}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+
+  <div class="site-footer">
+    {% include ("layout/footer.html") %}
+  </div>
+  {% include ("layout/scripts.html") %}
+  <script
+  src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+  <script>
+    $(function () {
+    $.fn.editable.defaults.mode = 'inline'
+    $(".modif").editable()
+    $(".modifSelect").editable({
+    type: 'select',
+    source: [
+    { value: 1, text: 'N°1' },
+    { value: 2, text: 'N°2' },
+    { value: 3, text: 'N°3' },
+    { value: 4, text: 'N°4' },
+    { value: 5, text: 'N°5' },
+    ]
+    })
+    })
+    </script>
+  {% endif %}
 
 </body>
 
